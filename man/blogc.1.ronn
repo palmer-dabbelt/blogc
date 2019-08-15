@@ -81,6 +81,10 @@ designed to be used with make(1).
     Output file. If provided this option, save the compiled output to the given
     file. Otherwise, the compiled output is sent to `stdout`.
 
+  * `-a` <LEVELS>:
+    Increment all headers by the given number of levels, which must be a positive
+    integer.
+
   * `-v`:
     Show program name, version and exit.
 

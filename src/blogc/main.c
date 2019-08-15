@@ -74,6 +74,7 @@ blogc_print_help(void)
 #ifdef MAKE_EMBEDDED
         "    -m            call and pass arguments to embedded blogc-make\n"
 #endif
+        "    -a LEVELS     increment all headers by the given number of levels\n"
         );
 }
 
@@ -167,6 +168,7 @@ main(int argc, char **argv)
     char *print = NULL;
     char *tmp = NULL;
     char **pieces = NULL;
+    size_t header_add = 0;
 
     bc_slist_t *sources = NULL;
     bc_trie_t *listing_entry_source = NULL;
@@ -257,6 +259,12 @@ main(int argc, char **argv)
                     embedded = true;
                     break;
 #endif
+                case 'a':
+                    if (argv[i][2] != '\0')
+                        header_add = atoi(argv[i] + 2);
+                    else if (i + 1 < argc)
+                        header_add = atoi(argv[++i]);
+                    break;
                 default:
                     blogc_print_usage();
                     fprintf(stderr, "blogc: error: invalid argument: -%c\n",
@@ -298,7 +306,8 @@ main(int argc, char **argv)
 
     bc_error_t *err = NULL;
 
-    bc_slist_t *s = blogc_source_parse_from_files(config, sources, &err);
+    bc_slist_t *s = blogc_source_parse_from_files(config, sources, &err,
+                                                  header_add);
     if (err != NULL) {
         bc_error_print(err, "blogc");
         rv = 1;
@@ -306,7 +315,8 @@ main(int argc, char **argv)
     }
 
     if (listing && listing_entry != NULL) {
-        listing_entry_source = blogc_source_parse_from_file(listing_entry, &err);
+        listing_entry_source = blogc_source_parse_from_file(listing_entry, &err,
+	                                                    header_add);
         if (err != NULL) {
             bc_error_print(err, "blogc");
             rv = 1;

@@ -27,7 +27,7 @@ test_source_parse(void **state)
         "\n"
         "bola\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(err);
     assert_non_null(source);
     assert_int_equal(bc_trie_size(source), 7);
@@ -60,7 +60,7 @@ test_source_parse_crlf(void **state)
         "\r\n"
         "bola\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(err);
     assert_non_null(source);
     assert_int_equal(bc_trie_size(source), 7);
@@ -95,7 +95,7 @@ test_source_parse_with_spaces(void **state)
         "\n"
         "bola\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(err);
     assert_non_null(source);
     assert_int_equal(bc_trie_size(source), 7);
@@ -133,7 +133,7 @@ test_source_parse_with_excerpt(void **state)
         "guda\n"
         "yay";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(err);
     assert_non_null(source);
     assert_int_equal(bc_trie_size(source), 7);
@@ -174,7 +174,7 @@ test_source_parse_with_first_header(void **state)
         "\n"
         "bola\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(err);
     assert_non_null(source);
     assert_int_equal(bc_trie_size(source), 7);
@@ -208,7 +208,7 @@ test_source_parse_with_description(void **state)
         "\n"
         "bola\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(err);
     assert_non_null(source);
     assert_int_equal(bc_trie_size(source), 7);
@@ -235,7 +235,7 @@ test_source_parse_config_empty(void **state)
 {
     const char *a = "";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -250,7 +250,7 @@ test_source_parse_config_invalid_key(void **state)
 {
     const char *a = "bola: guda";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
     assert_string_equal(err->msg,
@@ -266,7 +266,7 @@ test_source_parse_config_no_key(void **state)
 {
     const char *a = "BOLa";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
     assert_string_equal(err->msg,
@@ -282,7 +282,7 @@ test_source_parse_config_no_key2(void **state)
 {
     const char *a = "BOLA";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
     assert_string_equal(err->msg,
@@ -299,7 +299,7 @@ test_source_parse_config_no_value(void **state)
     // this is a special case, not an error
     const char *a = "BOLA:\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_non_null(source);
     assert_null(err);
     assert_string_equal(bc_trie_lookup(source, "BOLA"), "");
@@ -312,7 +312,7 @@ test_source_parse_config_no_value2(void **state)
 {
     const char *a = "BOLA:";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -329,7 +329,7 @@ test_source_parse_config_reserved_name(void **state)
 {
     const char *a = "FILENAME: asd\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -346,7 +346,7 @@ test_source_parse_config_reserved_name2(void **state)
 {
     const char *a = "CONTENT: asd\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -363,7 +363,7 @@ test_source_parse_config_reserved_name3(void **state)
 {
     const char *a = "DATE_FORMATTED: asd\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -380,7 +380,7 @@ test_source_parse_config_reserved_name4(void **state)
 {
     const char *a = "DATE_FIRST_FORMATTED: asd\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -397,7 +397,7 @@ test_source_parse_config_reserved_name5(void **state)
 {
     const char *a = "DATE_LAST_FORMATTED: asd\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -414,7 +414,7 @@ test_source_parse_config_reserved_name6(void **state)
 {
     const char *a = "PAGE_FIRST: asd\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -431,7 +431,7 @@ test_source_parse_config_reserved_name7(void **state)
 {
     const char *a = "PAGE_PREVIOUS: asd\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -448,7 +448,7 @@ test_source_parse_config_reserved_name8(void **state)
 {
     const char *a = "PAGE_CURRENT: asd\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -465,7 +465,7 @@ test_source_parse_config_reserved_name9(void **state)
 {
     const char *a = "PAGE_NEXT: asd\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -482,7 +482,7 @@ test_source_parse_config_reserved_name10(void **state)
 {
     const char *a = "PAGE_LAST: asd\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -499,7 +499,7 @@ test_source_parse_config_reserved_name11(void **state)
 {
     const char *a = "BLOGC_VERSION: 1.0\r\n";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -516,7 +516,7 @@ test_source_parse_config_value_no_line_ending(void **state)
 {
     const char *a = "BOLA: asd";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);
@@ -533,7 +533,7 @@ test_source_parse_invalid_separator(void **state)
 {
     const char *a = "BOLA: asd\n---#";
     bc_error_t *err = NULL;
-    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err);
+    bc_trie_t *source = blogc_source_parse(a, strlen(a), &err, 0);
     assert_null(source);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_SOURCE_PARSER);

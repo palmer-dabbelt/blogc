@@ -18,6 +18,6 @@ char* blogc_fix_description(const char *paragraph);
 char* blogc_content_parse_inline(const char *src);
 bool blogc_is_ordered_list_item(const char *str, size_t prefix_len);
 char* blogc_content_parse(const char *src, size_t *end_excerpt,
-    char **first_header, char **description);
+    char **first_header, char **description, size_t header_add);
 
 #endif /* _CONTENT_PARSER_H */

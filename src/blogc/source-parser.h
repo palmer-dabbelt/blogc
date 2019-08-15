@@ -14,6 +14,6 @@
 #include "../common/utils.h"
 
 bc_trie_t* blogc_source_parse(const char *src, size_t src_len,
-    bc_error_t **err);
+    bc_error_t **err, size_t header_add);
 
 #endif /* _SOURCE_PARSER_H */

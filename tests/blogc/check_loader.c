@@ -100,7 +100,7 @@ test_source_parse_from_file(void **state)
         "ASD: 123\n"
         "--------\n"
         "bola"));
-    bc_trie_t *t = blogc_source_parse_from_file("bola.txt", &err);
+    bc_trie_t *t = blogc_source_parse_from_file("bola.txt", &err, 0);
     assert_null(err);
     assert_non_null(t);
     assert_int_equal(bc_trie_size(t), 6);
@@ -120,7 +120,7 @@ test_source_parse_from_file_null(void **state)
     bc_error_t *err = NULL;
     will_return(__wrap_bc_file_get_contents, "bola.txt");
     will_return(__wrap_bc_file_get_contents, NULL);
-    bc_trie_t *t = blogc_source_parse_from_file("bola.txt", &err);
+    bc_trie_t *t = blogc_source_parse_from_file("bola.txt", &err, 0);
     assert_null(err);
     assert_null(t);
 }
@@ -153,7 +153,7 @@ test_source_parse_from_files(void **state)
     s = bc_slist_append(s, bc_strdup("bola2.txt"));
     s = bc_slist_append(s, bc_strdup("bola3.txt"));
     bc_trie_t *c = bc_trie_new(free);
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(err);
     assert_non_null(t);
     assert_int_equal(bc_slist_length(t), 3);  // it is enough, no need to look at the items
@@ -196,7 +196,7 @@ test_source_parse_from_files_filter_sort(void **state)
     s = bc_slist_append(s, bc_strdup("bola3.txt"));
     bc_trie_t *c = bc_trie_new(free);
     bc_trie_insert(c, "FILTER_SORT", bc_strdup("1"));
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(err);
     assert_non_null(t);
     assert_int_equal(bc_slist_length(t), 3);  // it is enough, no need to look at the items
@@ -242,7 +242,7 @@ test_source_parse_from_files_filter_reverse(void **state)
     s = bc_slist_append(s, bc_strdup("bola3.txt"));
     bc_trie_t *c = bc_trie_new(free);
     bc_trie_insert(c, "FILTER_REVERSE", bc_strdup("1"));
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(err);
     assert_non_null(t);
     assert_int_equal(bc_slist_length(t), 3);  // it is enough, no need to look at the items
@@ -287,7 +287,7 @@ test_source_parse_from_files_filter_sort_reverse(void **state)
     bc_trie_t *c = bc_trie_new(free);
     bc_trie_insert(c, "FILTER_SORT", bc_strdup("1"));
     bc_trie_insert(c, "FILTER_REVERSE", bc_strdup("1"));
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(err);
     assert_non_null(t);
     assert_int_equal(bc_slist_length(t), 3);  // it is enough, no need to look at the items
@@ -334,7 +334,7 @@ test_source_parse_from_files_filter_by_tag(void **state)
     s = bc_slist_append(s, bc_strdup("bola3.txt"));
     bc_trie_t *c = bc_trie_new(free);
     bc_trie_insert(c, "FILTER_TAG", bc_strdup("chunda"));
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(err);
     assert_non_null(t);
     assert_int_equal(bc_slist_length(t), 2);  // it is enough, no need to look at the items
@@ -407,7 +407,7 @@ test_source_parse_from_files_filter_by_page(void **state)
     bc_trie_t *c = bc_trie_new(free);
     bc_trie_insert(c, "FILTER_PAGE", bc_strdup("1"));
     bc_trie_insert(c, "FILTER_PER_PAGE", bc_strdup("2"));
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(err);
     assert_non_null(t);
     assert_int_equal(bc_slist_length(t), 2);  // it is enough, no need to look at the items
@@ -485,7 +485,7 @@ test_source_parse_from_files_filter_by_page2(void **state)
     bc_trie_t *c = bc_trie_new(free);
     bc_trie_insert(c, "FILTER_PAGE", bc_strdup("3"));
     bc_trie_insert(c, "FILTER_PER_PAGE", bc_strdup("2"));
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(err);
     assert_non_null(t);
     assert_int_equal(bc_slist_length(t), 2);  // it is enough, no need to look at the items
@@ -564,7 +564,7 @@ test_source_parse_from_files_filter_by_page3(void **state)
     bc_trie_t *c = bc_trie_new(free);
     bc_trie_insert(c, "FILTER_PAGE", bc_strdup("1"));
     bc_trie_insert(c, "FILTER_PER_PAGE", bc_strdup("2"));
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(err);
     assert_non_null(t);
     assert_int_equal(bc_slist_length(t), 2);  // it is enough, no need to look at the items
@@ -649,7 +649,7 @@ test_source_parse_from_files_filter_sort_and_by_page_and_tag(void **state)
     bc_trie_insert(c, "FILTER_TAG", bc_strdup("chunda"));
     bc_trie_insert(c, "FILTER_PAGE", bc_strdup("2"));
     bc_trie_insert(c, "FILTER_PER_PAGE", bc_strdup("2"));
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(err);
     assert_non_null(t);
     assert_int_equal(bc_slist_length(t), 2);  // it is enough, no need to look at the items
@@ -729,7 +729,7 @@ test_source_parse_from_files_filter_by_page_invalid(void **state)
     bc_trie_t *c = bc_trie_new(free);
     bc_trie_insert(c, "FILTER_PAGE", bc_strdup("-1"));
     bc_trie_insert(c, "FILTER_PER_PAGE", bc_strdup("2"));
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(err);
     assert_non_null(t);
     assert_int_equal(bc_slist_length(t), 2);  // it is enough, no need to look at the items
@@ -807,7 +807,7 @@ test_source_parse_from_files_filter_by_page_invalid2(void **state)
     bc_trie_t *c = bc_trie_new(free);
     bc_trie_insert(c, "FILTER_PAGE", bc_strdup("5"));
     bc_trie_insert(c, "FILTER_PER_PAGE", bc_strdup("2"));
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(err);
     assert_null(t);
     bc_trie_free(c);
@@ -841,7 +841,7 @@ test_source_parse_from_files_without_all_dates(void **state)
     s = bc_slist_append(s, bc_strdup("bola2.txt"));
     s = bc_slist_append(s, bc_strdup("bola3.txt"));
     bc_trie_t *c = bc_trie_new(free);
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(t);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_LOADER);
@@ -876,7 +876,7 @@ test_source_parse_from_files_filter_sort_without_all_dates(void **state)
     s = bc_slist_append(s, bc_strdup("bola3.txt"));
     bc_trie_t *c = bc_trie_new(free);
     bc_trie_insert(c, "FILTER_SORT", bc_strdup("1"));
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(t);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_LOADER);
@@ -907,7 +907,7 @@ test_source_parse_from_files_filter_sort_with_wrong_date(void **state)
     s = bc_slist_append(s, bc_strdup("bola3.txt"));
     bc_trie_t *c = bc_trie_new(free);
     bc_trie_insert(c, "FILTER_SORT", bc_strdup("1"));
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(t);
     assert_non_null(err);
     assert_int_equal(err->type, BLOGC_ERROR_LOADER);
@@ -928,7 +928,7 @@ test_source_parse_from_files_null(void **state)
     bc_error_t *err = NULL;
     bc_slist_t *s = NULL;
     bc_trie_t *c = bc_trie_new(free);
-    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err);
+    bc_slist_t *t = blogc_source_parse_from_files(c, s, &err, 0);
     assert_null(err);
     assert_null(t);
     assert_int_equal(bc_slist_length(t), 0);

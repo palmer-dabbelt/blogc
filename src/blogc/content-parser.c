@@ -676,7 +676,7 @@ blogc_is_ordered_list_item(const char *str, size_t prefix_len)
 
 char*
 blogc_content_parse(const char *src, size_t *end_excerpt, char **first_header,
-    char **description)
+    char **description, size_t header_add)
 {
     // src is always nul-terminated.
     size_t src_len = strlen(src);
@@ -842,10 +842,11 @@ blogc_content_parse(const char *src, size_t *end_excerpt, char **first_header,
                     slug = blogc_slugify(tmp);
                     if (slug == NULL)
                         bc_string_append_printf(rv, "<h%d>%s</h%d>%s",
-                            header_level, parsed, header_level, line_ending);
+                            header_level + header_add, parsed, header_level,
+                            line_ending);
                     else
                         bc_string_append_printf(rv, "<h%d id=\"%s\">%s</h%d>%s",
-                            header_level, slug, parsed, header_level,
+                            header_level + header_add, slug, parsed, header_level,
                             line_ending);
                     free(slug);
                     free(parsed);
@@ -922,7 +923,7 @@ blogc_content_parse(const char *src, size_t *end_excerpt, char **first_header,
                     // do not propagate title and description to blockquote parsing,
                     // because we just want paragraphs from first level of
                     // content.
-                    tmp = blogc_content_parse(tmp_str->str, NULL, NULL, NULL);
+                    tmp = blogc_content_parse(tmp_str->str, NULL, NULL, NULL, header_add);
                     bc_string_append_printf(rv, "<blockquote>%s</blockquote>%s",
                         tmp, line_ending);
                     free(tmp);

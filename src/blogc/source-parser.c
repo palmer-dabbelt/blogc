@@ -27,7 +27,8 @@ typedef enum {
 
 
 bc_trie_t*
-blogc_source_parse(const char *src, size_t src_len, bc_error_t **err)
+blogc_source_parse(const char *src, size_t src_len, bc_error_t **err,
+                   size_t header_add)
 {
     if (err == NULL || *err != NULL)
         return NULL;
@@ -154,7 +155,7 @@ blogc_source_parse(const char *src, size_t src_len, bc_error_t **err)
                     char *first_header = NULL;
                     char *description = NULL;
                     content = blogc_content_parse(tmp, &end_excerpt,
-                        &first_header, &description);
+                        &first_header, &description, header_add);
                     if (first_header != NULL) {
                         // do not override source-provided first_header.
                         if (NULL == bc_trie_lookup(rv, "FIRST_HEADER")) {
